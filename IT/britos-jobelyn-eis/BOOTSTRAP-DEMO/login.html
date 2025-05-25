@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+
+
+  <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+
+</head>
+<body class="bg-info">
+
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
+      <div class="card-body">
+        <h2 class="text-center text-primary mb-4">Login</h2>
+
+        <form id="loginForm">
+          <div class="mb-3">
+            <label for="uname" class="form-label">Username</label>
+            <input type="text" class="form-control" id="uname" placeholder="Enter username" required>
+          </div>
+          <div class="mb-3">
+            <label for="pword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="pword" placeholder="Enter password" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+       
+        <div id="errorMessage" class="alert alert-danger mt-3 text-center" style="display: none;">
+          Invalid username or password.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault(); 
+
+      const username = document.getElementById('uname').value;
+      const password = document.getElementById('pword').value;
+
+    
+    });
+  </script>
+
+</body>
+</html>
+
