@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payroll</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" />
+  <style>
+    body {
+      
+      background: linear-gradient(135deg, #e0f7fa, #80deea);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 1500px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #00796b;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+      letter-spacing: 1.1px;
+    }
+
+    table {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    thead.table-dark {
+      background-color: #004d40 !important;
+      color: #e0f2f1;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    tbody tr:hover {
+      background-color: #b2dfdb !important;
+      transition: background-color 0.3s ease;
+    }
+
+    td, th {
+      vertical-align: middle !important;
+      text-align: center;
+      font-size: 0.95rem;
+      padding: 12px 10px;
+    }
+
+    .btn-info {
+      background-color: #00796b;
+      border: none;
+      font-weight: 600;
+      padding: 10px 25px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-info:hover {
+      background-color: #004d40;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Automated Payroll Summary</h1>
+
+    <table class="table table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>Employee ID</th>
+          <th>Present Days</th>
+          <th>Late Days</th>
+          <th>Absent Days</th>
+          <th>On Leave Days</th>
+          <th>Total Salary (PHP)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for payroll in payroll_data %}
+        <tr>
+          <td>{{ payroll.employee_id }}</td>
+          <td>{{ payroll.present_days }}</td>
+          <td>{{ payroll.late_days }}</td>
+          <td>{{ payroll.absent_days }}</td>
+          <td>{{ payroll.on_leave_days }}</td>
+          <td>{{ payroll.total_salary }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between mt-4">
+      <a href="{{ url_for('home') }}" class="btn btn-secondary mb-3">&laquo; Previous</a>
+
+      <a href="{{ url_for('employee_status') }}" class="btn btn-info">Next</a>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

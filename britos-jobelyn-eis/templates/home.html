@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Information System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4a148c;
+        }
+
+        #searchBox {
+            max-width: 300px;
+            border-radius: 10px;
+        }
+
+        .btn-primary, .btn-info {
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-info:hover {
+            background-color: #5c6bc0;
+            color: white;
+        }
+
+        .table thead {
+            background-color: #8e24aa;
+            color: white;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f3e5f5;
+        }
+
+        .modal-content {
+            border-radius: 12px;
+        }
+
+        .modal-header {
+            background-color: #6a1b9a;
+        }
+
+        .modal-title, .modal-header .btn-close {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold">EMPLOYEE INFORMATION SYSTEM</h1>
+        </div>
+
+        <div class="d-flex justify-content-between mb-4">
+            <input type="text" class="form-control" id="searchBox" placeholder="Search">
+            <button type="button" class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#employeeModal" onclick="clearForm()">Add</button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Lastname</th>
+                        <th>Firstname</th>
+                        <th>Middlename</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTable"></tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <a href="{{ url_for('attendance') }}" class="btn btn-primary">Next</a>
+        </div>
+    </div>
+
+  
+    <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Employee Card</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editIndex">
+                    <input type="text" class="form-control mb-2" id="empID" placeholder="Employee ID">
+                    <input type="text" class="form-control mb-2" id="empLastname" placeholder="Last Name">
+                    <input type="text" class="form-control mb-2" id="empFirstname" placeholder="First Name">
+                    <input type="text" class="form-control mb-2" id="empMiddlename" placeholder="Middle Name">
+                    <input type="text" class="form-control mb-2" id="empPosition" placeholder="Position">
+                    <input type="text" class="form-control mb-2" id="empOffice" placeholder="Office">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" onclick="saveEmployee()">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        let employees = [
+            {id: "001", lastname: "j", firstname: "k", middlename: "jjk", position: "ll", office: "mm"},
+            {id: "002", lastname: "kk", firstname: "jjj", middlename: "kkk", position: "kkk", office: "nhn"},
+            {id: "003", lastname: "Bsh", firstname: "bshh", middlename: "jhg", position: "lklk", office: "l"},
+            {id: "004", lastname: "ww", firstname: "Jon", middlename: "jhgd", position: "ttt", office: "llm"},
+            {id: "005", lastname: "sss", firstname: "azz", middlename: "jhgf", position: "rrd", office: "mnnjb"},
+            {id: "006", lastname: "bbb", firstname: "Axl", middlename: "jhgk", position: "ttt", office: "kkkkn"},
+            {id: "007", lastname: "kli", firstname: "Cli", middlename: "jghg", position: "ggg", office: "kkj"},
+            {id: "008", lastname: "klii", firstname: "ey", middlename: "jhlg", position: "kkj", office: "ggf"},
+            {id: "009", lastname: "kin", firstname: "aii", middlename: "hhg", position: "mjn", office: "jjjnn"},
+            {id: "010", lastname: "Pin", firstname: "Vee", middlename: "jlk", position: "ggg", office: "lll"},
+        ];
+
+        function loadEmployees() {
+            let table = document.getElementById("employeeTable");
+            table.innerHTML = "";
+            employees.forEach((emp, index) => {
+                table.innerHTML += `
+                    <tr>
+                        <td>${emp.id}</td>
+                        <td>${emp.lastname}</td>
+                        <td>${emp.firstname}</td>
+                        <td>${emp.middlename}</td>
+                        <td>${emp.position}</td>
+                        <td>${emp.office}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="editEmployee(${index})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteEmployee(${index})">Delete</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        function clearForm() {
+            document.getElementById("editIndex").value = "";
+            document.querySelectorAll('#employeeModal input').forEach(input => input.value = '');
+        }
+
+        function saveEmployee() {
+            let id = empID.value, lastname = empLastname.value, firstname = empFirstname.value;
+            let middlename = empMiddlename.value, position = empPosition.value, office = empOffice.value;
+            let index = editIndex.value;
+
+            if (id && lastname && firstname && middlename && position && office) {
+                if (index === "") {
+                    employees.push({id, lastname, firstname, middlename, position, office});
+                } else {
+                    employees[index] = {id, lastname, firstname, middlename, position, office};
+                }
+                loadEmployees();
+                bootstrap.Modal.getInstance(document.getElementById("employeeModal")).hide();
+                clearForm();
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+
+        function editEmployee(index) {
+            let emp = employees[index];
+            editIndex.value = index;
+            empID.value = emp.id;
+            empLastname.value = emp.lastname;
+            empFirstname.value = emp.firstname;
+            empMiddlename.value = emp.middlename;
+            empPosition.value = emp.position;
+            empOffice.value = emp.office;
+
+            new bootstrap.Modal(document.getElementById("employeeModal")).show();
+        }
+
+        function deleteEmployee(index) {
+            if (confirm("Are you sure you want to delete this employee?")) {
+                employees.splice(index, 1);
+                loadEmployees();
+            }
+        }
+
+        loadEmployees();
+    </script>
+
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

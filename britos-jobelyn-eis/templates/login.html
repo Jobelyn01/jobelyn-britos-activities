@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css')}}">
+
+  <style>
+   
+    body {
+      background: linear-gradient(
+          rgba(0, 0, 0, 0.5), 
+          rgba(0, 0, 0, 0.5)
+        ),
+        url("{{ url_for('static', filename='img/2.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      padding: 2rem;
+      width: 100%;
+      max-width: 400px;
+      color: #fff;
+    }
+
+    .glass-card h2 {
+      text-align: center;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .form-label {
+      color: #f1f1f1;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.85);
+      border: none;
+    }
+
+    .form-control:focus {
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+      outline: none;
+    }
+
+    .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .btn-primary:hover {
+      background-color: #0b5ed7;
+    }
+
+    #errorMessage {
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glass-card">
+    <h2>LOGIN</h2>
+
+    <form id="loginForm">
+      <div class="mb-3">
+        <label for="uname" class="form-label">Username</label>
+        <input type="text" class="form-control" id="uname" placeholder="Enter username" required>
+      </div>
+      <div class="mb-3">
+        <label for="pword" class="form-label">Password</label>
+        <input type="password" class="form-control" id="pword" placeholder="Enter password" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+
+    <div id="errorMessage" class="alert alert-danger mt-3 text-center" style="display: none;">
+      Invalid username or password.
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('uname').value.trim();
+      const password = document.getElementById('pword').value.trim();
+
+      if (username === "jovii" && password === "123456") {
+        window.location.href = "home";
+      } else {
+        document.getElementById('errorMessage').style.display = "block";
+      }
+    });
+  </script>
+
+</body>
+</html>
+

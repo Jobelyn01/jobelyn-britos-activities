@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Attendance</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" />
+  <style>
+    body {
+      background-color: #e9f2fb; 
+      font-family: Arial, sans-serif;
+    }
+
+    table.calendar {
+      table-layout: fixed;
+      width: 100%;
+      font-size: 0.75rem;
+    }
+
+    table.calendar th,
+    table.calendar td {
+      text-align: center;
+      vertical-align: middle;
+      border: 1px solid #dee2e6;
+      padding: 2px;
+      white-space: nowrap;
+      width: 30px;
+      height: 30px;
+    }
+
+    table.calendar th:first-child,
+    table.calendar td:first-child {
+      width: 100px;
+      white-space: normal;
+      word-wrap: break-word;
+    }
+
+    table.calendar th {
+      background-color: #0056b3;
+      color: white;
+      font-size: 0.8rem;
+    }
+
+    td.present {
+      background-color: #d4edda;
+      color: #155724;
+      font-weight: bold;
+    }
+
+    td.absent {
+      background-color: #f8d7da;
+      color: #721c24;
+      font-weight: bold;
+    }
+
+    td.late {
+      background-color: #fff3cd;
+      color: #856404;
+      font-weight: bold;
+    }
+
+    td.on_leave {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">Employee Attendance</h1>
+
+   
+    <form method="POST">
+      <div class="row">
+        <div class="col-md-4">
+          <label for="employee_id" class="form-label">Employee ID</label>
+          <input type="text" name="employee_id" class="form-control" placeholder="Enter employee ID" required />
+        </div>
+        <div class="col-md-4">
+          <label for="status" class="form-label">Status</label>
+          <select name="status" class="form-control" required>
+            <option value="Present">Present</option>
+            <option value="Absent">Absent</option>
+            <option value="Late">Late</option>
+            <option value="On Leave">On Leave</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" name="date" class="form-control" required />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Submit Attendance</button>
+    </form>
+
+   
+    <h3 class="mt-5">Attendance Summary for {{ calendar.month_name[month] }} {{ year }}</h3>
+    <div class="table-responsive">
+      <table class="calendar table table-bordered">
+        <thead>
+          <tr>
+            <th>Employee ID</th>
+            {% for day in range(1, days_in_month + 1) %}
+              <th>{{ day }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for emp_id, days in attendance_data.items() %}
+          <tr>
+            <td>{{ emp_id }}</td>
+            {% for day in range(1, days_in_month + 1) %}
+              {% set status = days.get(day) %}
+              <td class="{% if status %}{{ status | lower | replace(' ', '_') }}{% endif %}">
+                {% if status == 'Present' %}
+                  P
+                {% elif status == 'Absent' %}
+                  A
+                {% elif status == 'Late' %}
+                  Late
+                {% elif status == 'On Leave' %}
+                  OL
+                {% else %}
+                  {{ status if status else '' }}
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between mt-3">
+     
+      <a href="{{ url_for('home') }}" class="btn btn-secondary mb-3">&laquo; Previous</a>
+       <a href="{{ url_for('payroll') }}" class="btn btn-info">Next</a>
+
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
+
